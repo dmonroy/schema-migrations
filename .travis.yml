@@ -1,7 +1,8 @@
 sudo: false
 language: python
+addons:
+  postgresql: "9.3"
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
   - "3.4"

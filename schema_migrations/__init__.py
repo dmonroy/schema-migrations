@@ -2,7 +2,11 @@ import psycopg2
 import os
 
 from psycopg2._psycopg import ProgrammingError
-from urllib.parse import urlsplit
+try:
+    from urllib.parse import urlsplit
+except ImportError:  # pragma: no cover
+    from urlparse import urlsplit
+
 
 DEFAULT_GROUP = {'default': './migrations/'}
 STATUS_PENDING = -1
@@ -11,6 +15,15 @@ STATUS_OK = 1
 
 SELECT_SQL = 'select group_name, name from migration_history'
 INSERT_SQL = 'insert into migration_history values (%s, %s)'
+CREATE_TABLE_DDL = '''
+BEGIN;
+CREATE TABLE migration_history (
+  group_name TEXT NOT NULL,
+  name TEXT NOT NULL,
+  PRIMARY KEY (group_name, name)
+);
+END;
+'''
 
 
 class MigrationController(object):
@@ -40,18 +53,8 @@ class MigrationController(object):
                 completed[group].append(name)
         except ProgrammingError:
             # Must rollback previous transaction
-            cur.execute(
-                '''
-                ROLLBACK;
-                BEGIN;
-                CREATE TABLE migration_history (
-                  group_name TEXT NOT NULL,
-                  name TEXT NOT NULL,
-                  PRIMARY KEY (group_name, name)
-                );
-                END;
-                '''
-            )
+            cur.execute('ROLLBACK;')
+            cur.execute(CREATE_TABLE_DDL)
         cur.close()
 
         return completed

@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='schema-migrations',
-    version='0.1.2',
+    use_scm_version=True,
     packages=['schema_migrations'],
     url='',
     license='MIT License',
@@ -12,5 +12,8 @@ setup(
     install_requires=[
         'psycopg2',
         'pyyaml',
+    ],
+    setup_requires=[
+        'setuptools_scm',
     ]
 )

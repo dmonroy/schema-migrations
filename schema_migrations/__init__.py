@@ -144,7 +144,6 @@ class MigrationController(object):
                     cur.execute('END;')
                     print('    {db}: Done'.format(db=db))
 
-
     def migration_info(self, group, migration_name, previous_migration):
 
         def get_file_content(file):

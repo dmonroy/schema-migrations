@@ -4,7 +4,7 @@ setup(
     name='schema-migrations',
     use_scm_version=True,
     packages=['schema_migrations'],
-    url='',
+    url='https://github.com/dmonroy/schema-migrations',
     license='MIT License',
     author='Darwin Monroy',
     author_email='contact@darwinmonroy.com',

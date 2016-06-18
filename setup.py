@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='schema-migrations',
-    version='0.0.0',
+    version='0.1.2',
     packages=['schema_migrations'],
     url='',
     license='MIT License',

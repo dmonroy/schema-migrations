@@ -73,7 +73,10 @@ class MigrationController(object):
 
     def migrate(self):
         for group, migrations in self.list().items():
+            print(group)
+            migrations = sorted(migrations, key=lambda k: k['name'])
             for migration in migrations:
+                print('        ', migration['name'])
                 for db, status in migration['status']['databases'].items():
                     if not status:
                         script = os.path.join(
@@ -81,15 +84,19 @@ class MigrationController(object):
                             migration['name'],
                             'forward.sql'
                         )
-                        with open(script) as f:
-                            cur = self.get_cursor(db)
-                            cur.execute('BEGIN;')
-                            cur.execute(f.read())
-                            cur.execute(
-                                INSERT_SQL,
-                                (group, migration['name'])
-                            )
-                            cur.execute('END;')
+                        try:
+                            with open(script) as f:
+                                cur = self.get_cursor(db)
+                                cur.execute('BEGIN;')
+                                cur.execute(f.read())
+                                cur.execute(
+                                    INSERT_SQL,
+                                    (group, migration['name'])
+                                )
+                                cur.execute('END;')
+                        except Exception as e:
+                            print(e)
+                            raise
 
     def migration_info(self, group, migration_name):
         return dict(
@@ -137,7 +144,7 @@ class MigrationController(object):
             'password': parsed.password,
             'database': parsed.path.lstrip('/'),
             'host': parsed.hostname,
-            'port': parsed.port,
+            'port': parsed.port or 5432,
         }
 
     def close(self):

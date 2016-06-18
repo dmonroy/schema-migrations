@@ -10,6 +10,7 @@ setup(
     author_email='contact@darwinmonroy.com',
     description='PostgreSQL Schema Migrations',
     install_requires=[
-        'psycopg2'
+        'psycopg2',
+        'pyyaml',
     ]
 )

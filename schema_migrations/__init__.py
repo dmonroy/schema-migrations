@@ -82,7 +82,7 @@ class MigrationController(object):
                 if not os.path.isdir(migration_folder):
                     continue
 
-                if migration_folder == '__pycache__':
+                if migration == '__pycache__':
                     continue
 
                 migration_info = self.migration_info(

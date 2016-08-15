@@ -77,7 +77,7 @@ class MigrationController(object):
     def list_group(self, group, group_folder):
         def group_migrations():
             previous_migration = None
-            for migration in os.listdir(group_folder):
+            for migration in sorted(os.listdir(group_folder)):
                 migration_folder = os.path.join(group_folder, migration)
                 if not os.path.isdir(migration_folder):
                     continue
